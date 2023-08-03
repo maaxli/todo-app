@@ -139,8 +139,66 @@ ul {
 }
 
 
-/* TODO ITEM DISPLAY STYLES */
+/* TASK DISPLAY STYLES */
 .container {
+    display: flex;
     background-color: var(--color-three);
+    justify-content: center;
 }
 
+.todo-container {
+    width: 900px;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.todo-container h1 {
+    align-self: flex-start;
+    font-size: 48px;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.todo-list {
+    width: 100%;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.new-todo {
+    width: 100%;
+    height: 64px;
+    border: 1px dashed gray;
+    border-radius: 10px;
+}
+
+/* TODO ITEM STYLES */
+.todo-item {
+    height: 60px;
+    padding: 10px 10px 0 10px;
+    border-top: 1px solid gray;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.top {
+    font-size: 24px;
+}
+
+.bottom {
+    display: flex;
+    gap: 8px;
+}
+
+.right-items {
+    display: flex;
+    gap: 12px;
+}

@@ -68,7 +68,6 @@ class Display {
         let newProject = document.createElement("li");
         newProject.textContent = project.title;
         projects.appendChild(newProject);
-        console.log("DOM interacted!");
     }
 
 
