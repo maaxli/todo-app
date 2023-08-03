@@ -64,6 +64,7 @@ ul {
     border-radius: 5px;
     width: 185px;
     height: 24px;
+    background-color: rgb(244, 244, 244);
 }
 
 .header-links > li {
@@ -86,14 +87,33 @@ ul {
 }
 
 
-
-
-
 /* PROJECT NAVBAR STYLES */
 .projects {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
     background-color: var(--color-two);
+    display: flex;
+    justify-content: center;
+}
+
+.project-container {
+    width: 200px;
+    padding-top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.projects h3 {
+    border: 2px solid var(--color-one);
+    border-radius: 10px;
+    margin: 0;
+    height: 36px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-one);
 }
 
 
