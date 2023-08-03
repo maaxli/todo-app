@@ -1,5 +1,3 @@
-import format from '../node_modules/date-fns/format';
-
 class Todo {
     constructor(title, description, dueDate, priority) {
         this._title = title;
