@@ -10,37 +10,90 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _display__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _todoItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var _todoProject__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+/* harmony import */ var _todoItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _todoProject__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 
 
 
-// Role: acts as the controller, handles event listeners, etc.
-//      does _not_ alter the DOM directly
-//      does listen for events and handle/manipulate todo/project instances
 class App {
-    projects = [];
+    projects = []; // All projects that are currently present
+    currProject; // The currently-selected project
 
     constructor() {
         this.display = new _display__WEBPACK_IMPORTED_MODULE_0__["default"]();
     }
 
+    // Adding event listeners to all buttons
     initialize() {
+
+        // TODO: ONCE PROJECT IS ENTIRELY DONE, DYNAMICALLY LOAD THE DUMMY TASKS/PROJECTS
+        //       AT THE BEGINNING OF INITIALIZATION (HERE) !!!
+
+        // Listening to the `+ New Project` button
         const newProjectButton = document.querySelector(".create-project");
         newProjectButton.addEventListener("click", () => {
-            while (true) {
-                const projectName = prompt("Enter project name");
-                if (projectName.length > 1) {
+            let projectName = "";
+            // Prompting the user until a valid name is entered, or the user clicks "cancel"
+            while (projectName.length < 2) {
+                projectName = prompt("Enter project name");
+                if (projectName === null) {
+                    return;
+                } else if (projectName.length > 1) {
+                    // Project name is valid, so create a new project and add it to our array
                     const newProject = new _todoProject__WEBPACK_IMPORTED_MODULE_2__["default"](projectName);
                     this.projects.push(newProject);
-                    this.display.createNewProject(newProject);
-                    break;
-                } else if (projectName) {
-                    break;
-                } else {
-                    alert("Error: Project name must be at least 2 characters long.")
+
+                    // Display the project, AND return the new list item so we can add a listener
+                    const projectListItem = this.display.createNewProject(projectName);
+                    projectListItem.addEventListener("click", () => {
+                        this.currProject = newProject;
+                        let projectList = document.querySelectorAll(".project-list li");
+                        this.display.displayProjectTasks(projectListItem, projectList);
+                    });
+                    return;
                 }
+                alert("Error: Project name must be at least 2 characters long.");
+            }
+        });
+
+        // Listening to the `+ New Task` button
+        const newTaskButton = document.querySelector(".create-todo");
+        newTaskButton.addEventListener("click", () => {
+            // Asks the client for the task's title, description, due date, and priority
+            if (this.currProject === undefined) {
+                alert("Please select a project to create a task, or create a project if none yet exist!");
+                return;
+            }
+            let taskTitle = "";
+            while (taskTitle.length < 2) {
+                taskTitle = prompt("Enter task name");
+                if (taskTitle === null) {
+                    return;
+                } else if (taskTitle.length > 1) {
+                    break;
+                }
+                alert("Error: Task name must be at least 2 characters long.");
+            }
+            let taskDescription = prompt("Enter task description");
+            if (taskDescription === null) return;
+            let taskDueDate = prompt("Enter task due date");
+            if (taskDueDate === null) return;
+            let taskPriority = "";
+            while (true) {
+                taskPriority = prompt("Enter task priority (low/medium/high)");
+                if (taskPriority === null) {
+                    return;
+                } else if (taskPriority == "low" || taskPriority == "medium" || taskPriority == "high") {
+                    // All fields are valid, so create a new task and add it to the current project
+                    const newTask = new _todoItem__WEBPACK_IMPORTED_MODULE_1__["default"](taskTitle, taskDescription, taskDueDate, taskPriority);
+                    this.currProject.todos.push(newTask);
+
+                    // Display the project (TODO may have to add many more event listeners...)
+                    this.display.createNewTask(newTask);
+                    return;
+                }
+                alert("Error: Enter valid task priority.");
             }
         });
     }
@@ -56,30 +109,50 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _assets_folder_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+
+
 // Role: Interact with DOM, handle display
 
 class Display {
     constructor() {
-        console.log("display created");
     }
 
-    createNewProject(project) {
+    createNewProject(projectTitle) {
         const projects = document.querySelector(".project-list");
         let newProject = document.createElement("li");
-        newProject.textContent = project.title;
+        let folderIcon = new Image();
+        folderIcon.src = _assets_folder_svg__WEBPACK_IMPORTED_MODULE_0__;
+        newProject.appendChild(folderIcon);
+        newProject.appendChild(document.createTextNode(" " + projectTitle));
         projects.appendChild(newProject);
+        return newProject;
+    }
+    
+    createNewTask(Todo) {
+        
     }
 
-
-
-
-
+    displayProjectTasks(projectListItem, projectList) {
+        projectList.forEach(project => project.classList.remove("selected"));
+        projectListItem.classList.add("selected");
+        console.log("project selection displayed");
+        // Highlight selected project (in sidebar)
+        // Populate list of tasks
+        // Change project title display
+    }
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Display);
 
 /***/ }),
 /* 3 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "cfba46690d019c379d15.svg";
+
+/***/ }),
+/* 4 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -93,18 +166,6 @@ class Todo {
         this._dueDate = dueDate;
         this._priority = priority;
         console.log("todo item created") // TODO interact with DOM
-
-        /* Important note: 
-         * The new todo item is only displayed when the user is "at" the correct place to view
-         * the item, ie when the user is viewing the project that the todo item is inside
-         * 
-         * Otherwise, the user cannot see the item (duh). This seems to indicate that we don't
-         * necessarily change the DOM here-- perhaps there is some other logic where, when the user
-         * opens a project, (for example) the viewTodo() function is called and the user's screen is
-         * populated with todo items that were previously created.
-         * 
-         * This idea applies to other classes as well.
-         */
     }
     get title() {
         return this._title;
@@ -139,7 +200,7 @@ class Todo {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Todo);
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -208,6 +269,18 @@ class Project {
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
@@ -222,6 +295,29 @@ class Project {
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	(() => {
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src;
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) {
+/******/ 					var i = scripts.length - 1;
+/******/ 					while (i > -1 && !scriptUrl) scriptUrl = scripts[i--].src;
+/******/ 				}
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl;
 /******/ 	})();
 /******/ 	
 /************************************************************************/
