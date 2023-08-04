@@ -8,13 +8,28 @@ class App {
 
     constructor() {
         this.display = new Display();
+
+        // Loading sample tasks/projects
+        const project1 = new Project("Pre-Penn Tasks");
+        this.currProject = project1;
+        project1.todos.push(new Todo("Thrive at Penn | Canvas", "", "8/18/2023", "Medium"));
+        project1.todos.push(new Todo("Buy Dorm Items", "", "8/18/2023", "High"));
+        project1.todos.push(new Todo("Pack", "", "8/21/2023", "Low"));
+        const sampleElement1 = this.display.createNewProject(project1.title);
+        this.addProjectListener(sampleElement1, project1);
+        
+        const project2 = new Project("The Odin Project");
+        project2.todos.push(new Todo("Finish Todo List Project", "", "N/A", "High"));
+        project2.todos.push(new Todo("Finish JavaScript Course", "skim CS section", "N/A", "Medium"));
+        const sampleElement2 = this.display.createNewProject(project2.title);
+        this.addProjectListener(sampleElement2, project2);
+
+        const projectList = document.querySelectorAll(".project-list li");
+        this.display.displayProjectTasks(project1, sampleElement1, projectList);
     }
 
     // Adding event listeners to all buttons
     initialize() {
-
-        // TODO: ONCE PROJECT IS ENTIRELY DONE, DYNAMICALLY LOAD THE DUMMY TASKS/PROJECTS
-        //       AT THE BEGINNING OF INITIALIZATION (HERE) !!!
 
         // Listening to the `+ New Project` button
         const newProjectButton = document.querySelector(".create-project");
@@ -70,8 +85,7 @@ class App {
                     // All fields are valid, so create a new task and add it to the current project
                     const newTask = new Todo(taskTitle, taskDescription, taskDueDate, taskPriority);
                     this.currProject.todos.push(newTask);
-
-                    this.display.createNewTask(newTask); // TODO UNFINISHED
+                    this.display.createNewTask(newTask);
                     return;
                 }
                 alert("Error: Enter valid task priority.");
