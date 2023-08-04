@@ -20,7 +20,7 @@ class Todo {
         console.log("new description set"); // TODO interact with DOM
     }
     get dueDate() {
-        this._dueDate = newDate;
+        return this._dueDate;
     }
     set dueDate(newDate) {
         this._dueDate = newDate;
