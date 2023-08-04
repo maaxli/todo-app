@@ -31,12 +31,8 @@ class App {
                     this.projects.push(newProject);
 
                     // Display the project, AND return the new list item so we can add a listener
-                    const projectListItem = this.display.createNewProject(projectName);
-                    projectListItem.addEventListener("click", () => {
-                        this.currProject = newProject;
-                        let projectList = document.querySelectorAll(".project-list li");
-                        this.display.displayProjectTasks(projectListItem, projectList);
-                    });
+                    const projectElement = this.display.createNewProject(projectName);
+                    this.addProjectListener(projectElement, newProject);
                     return;
                 }
                 alert("Error: Project name must be at least 2 characters long.");
@@ -67,20 +63,28 @@ class App {
             if (taskDueDate === null) return;
             let taskPriority = "";
             while (true) {
-                taskPriority = prompt("Enter task priority (low/medium/high)");
+                taskPriority = prompt("Enter task priority (\"Low\"/\"Medium\"/\"High\")");
                 if (taskPriority === null) {
                     return;
-                } else if (taskPriority == "low" || taskPriority == "medium" || taskPriority == "high") {
+                } else if (taskPriority == "Low" || taskPriority == "Medium" || taskPriority == "High") {
                     // All fields are valid, so create a new task and add it to the current project
                     const newTask = new Todo(taskTitle, taskDescription, taskDueDate, taskPriority);
                     this.currProject.todos.push(newTask);
 
-                    // Display the project (TODO may have to add many more event listeners...)
-                    this.display.createNewTask(newTask);
+                    this.display.createNewTask(newTask); // TODO UNFINISHED
                     return;
                 }
                 alert("Error: Enter valid task priority.");
             }
+        });
+    }
+
+    // Helper method: Add event listeners to projects
+    addProjectListener(projectElement, newProject) {
+        projectElement.addEventListener("click", () => {
+            this.currProject = newProject;
+            let projectList = document.querySelectorAll(".project-list li");
+            this.display.displayProjectTasks(newProject, projectElement, projectList);
         });
     }
 }

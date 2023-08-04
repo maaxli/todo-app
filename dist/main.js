@@ -45,12 +45,8 @@ class App {
                     this.projects.push(newProject);
 
                     // Display the project, AND return the new list item so we can add a listener
-                    const projectListItem = this.display.createNewProject(projectName);
-                    projectListItem.addEventListener("click", () => {
-                        this.currProject = newProject;
-                        let projectList = document.querySelectorAll(".project-list li");
-                        this.display.displayProjectTasks(projectListItem, projectList);
-                    });
+                    const projectElement = this.display.createNewProject(projectName);
+                    this.addProjectListener(projectElement, newProject);
                     return;
                 }
                 alert("Error: Project name must be at least 2 characters long.");
@@ -81,7 +77,7 @@ class App {
             if (taskDueDate === null) return;
             let taskPriority = "";
             while (true) {
-                taskPriority = prompt("Enter task priority (low/medium/high)");
+                taskPriority = prompt("Enter task priority (\"Low\"/\"Medium\"/\"High\")");
                 if (taskPriority === null) {
                     return;
                 } else if (taskPriority == "low" || taskPriority == "medium" || taskPriority == "high") {
@@ -89,12 +85,20 @@ class App {
                     const newTask = new _todoItem__WEBPACK_IMPORTED_MODULE_1__["default"](taskTitle, taskDescription, taskDueDate, taskPriority);
                     this.currProject.todos.push(newTask);
 
-                    // Display the project (TODO may have to add many more event listeners...)
-                    this.display.createNewTask(newTask);
+                    this.display.createNewTask(newTask); // TODO UNFINISHED
                     return;
                 }
                 alert("Error: Enter valid task priority.");
             }
+        });
+    }
+
+    // Helper method: Add event listeners to projects
+    addProjectListener(projectElement, newProject) {
+        projectElement.addEventListener("click", () => {
+            this.currProject = newProject;
+            let projectList = document.querySelectorAll(".project-list li");
+            this.display.displayProjectTasks(newProject, projectElement, projectList);
         });
     }
 }
@@ -128,18 +132,67 @@ class Display {
         projects.appendChild(newProject);
         return newProject;
     }
-    
-    createNewTask(Todo) {
-        
-    }
 
-    displayProjectTasks(projectListItem, projectList) {
+    displayProjectTasks(newProject, projectListItem, projectList) {
         projectList.forEach(project => project.classList.remove("selected"));
         projectListItem.classList.add("selected");
-        console.log("project selection displayed");
-        // Highlight selected project (in sidebar)
-        // Populate list of tasks
+
+        // Remove all the currently displayed tasks and load the new ones
+        const taskListParent = document.querySelector(".todo-list");
+        while (taskListParent.childElementCount > 1) {
+            taskListParent.removeChild(taskListParent.firstChild);
+        }
+        newProject.todos.forEach((task) => {
+            this.displayTask(task, taskListParent);
+        });
+
         // Change project title display
+        const projectTitle = document.querySelector(".todo-container h1");
+        projectTitle.textContent = newProject.title;
+
+        console.log("done displaying tasks");
+    }
+
+    // Helper function, returns the task's element that was created
+    displayTask(task, taskListParent) {
+        const taskElement = document.createElement("li");
+        taskElement.classList.add("todo-item");
+
+        const leftDiv = document.createElement("div");
+        leftDiv.classList.add("left-items");
+        taskElement.appendChild(leftDiv);
+
+        const topDiv = document.createElement("div");
+        topDiv.classList.add("top");
+        topDiv.textContent = task.title;
+        leftDiv.appendChild(topDiv);
+
+        const bottomDiv = document.createElement("div");
+        bottomDiv.classList.add("bottom");
+        leftDiv.appendChild(bottomDiv);
+
+        const dueDateDiv = document.createElement("div");
+        dueDateDiv.textContent = `Due: ${task.dueDate}`;
+        bottomDiv.appendChild(dueDateDiv);
+
+        const priorityDiv = document.createElement("div");
+        priorityDiv.textContent = `Priority: ${task.priority}`;
+        bottomDiv.appendChild(priorityDiv);
+
+        const rightDiv = document.createElement("div");
+        rightDiv.classList.add("right-items");
+        taskElement.appendChild(rightDiv);
+
+        const editDiv = document.createElement("div");
+        editDiv.textContent = `Edit`;
+        rightDiv.appendChild(editDiv);
+
+        const deleteDiv = document.createChild("div");
+        deleteDiv.textContent = `Delete`;
+        rightDiv.appendChild(deleteDiv);
+
+        taskListParent.appendChild(taskElement);
+        return taskElement;
     }
 }
 
@@ -165,7 +218,6 @@ class Todo {
         this._description = description;
         this._dueDate = dueDate;
         this._priority = priority;
-        console.log("todo item created") // TODO interact with DOM
     }
     get title() {
         return this._title;
