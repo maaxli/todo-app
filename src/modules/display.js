@@ -17,17 +17,17 @@ class Display {
         return newProject;
     }
 
-    displayProjectTasks(newProject, projectListItem, projectList) {
-        projectList.forEach(project => project.classList.remove("selected"));
-        projectListItem.classList.add("selected");
+    displayProjectTasks(newProject, projectElement, projectNodeList) {
+        projectNodeList.forEach(project => project.classList.remove("selected"));
+        projectElement.classList.add("selected");
 
         // Remove all the currently displayed tasks and load the new ones
-        const taskListParent = document.querySelector(".todo-list");
-        while (taskListParent.childElementCount > 1) {
-            taskListParent.removeChild(taskListParent.firstChild);
+        const taskList = document.querySelector(".todo-list");
+        while (taskList.childElementCount > 1) {
+            taskList.removeChild(taskList.firstChild);
         }
         newProject.todos.forEach((task) => {
-            this.displayTask(task, taskListParent);
+            this.displayTask(task, taskList);
         });
 
         // Change project title display
@@ -37,8 +37,13 @@ class Display {
         console.log("done displaying tasks");
     }
 
+    createNewTask(newTask) {
+        const taskList = document.querySelector(".todo-list");
+        this.displayTask(newTask, taskList);
+    }
+
     // Helper function, returns the task's element that was created
-    displayTask(task, taskListParent) {
+    displayTask(task, taskList) {
         const taskElement = document.createElement("li");
         taskElement.classList.add("todo-item");
 
@@ -71,11 +76,12 @@ class Display {
         editDiv.textContent = `Edit`;
         rightDiv.appendChild(editDiv);
 
-        const deleteDiv = document.createChild("div");
+        const deleteDiv = document.createElement("div");
         deleteDiv.textContent = `Delete`;
         rightDiv.appendChild(deleteDiv);
 
-        taskListParent.appendChild(taskElement);
+        const createTodoButton = document.querySelector(".final");
+        taskList.insertBefore(taskElement, createTodoButton);
         return taskElement;
     }
 }
