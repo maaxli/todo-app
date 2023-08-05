@@ -96,6 +96,7 @@ class App {
     // Helper method: Add event listeners to projects
     addProjectListeners(projectElement, newProject) {
         projectElement.addEventListener("click", () => {
+            console.log(`${newProject.title} displayed`);
             this.currProject = newProject;
             let projectList = document.querySelectorAll(".project-list li");
             this.display.displayProjectTasks(newProject, projectElement, projectList);
@@ -105,6 +106,22 @@ class App {
         });
         projectElement.addEventListener("mouseleave", () => {
             projectElement.classList.remove("project-mouseover");
+        });
+
+        const deleteButton = projectElement.lastElementChild;
+        deleteButton.addEventListener("click", (event) => {
+            const decision = prompt("Click \"OK\" to delete project: " + newProject.title + "\n(text input irrelevant)");
+            if (decision === null) return;
+            for (let i = 0; i < this.projects.length; i++) {
+                if (this.projects[i] === newProject) this.projects.splice(i, 1);
+            }
+            this.display.deleteProject(projectElement);
+            if (this.currProject === newProject) {
+                this.currProject = undefined;
+                this.display.clearTasks();
+            }
+            event.stopPropagation();
+            console.log("project deleted");
         });
     }
 }

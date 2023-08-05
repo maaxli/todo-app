@@ -8,13 +8,32 @@ class Display {
 
     createNewProject(projectTitle) {
         const projects = document.querySelector(".project-list");
-        let projectElement = document.createElement("li");
-        let folderIcon = new Image();
+        const projectElement = document.createElement("li");
+
+        const leftDiv = document.createElement("div");
+        leftDiv.classList.add("project-left");
+        projectElement.appendChild(leftDiv);
+
+        const folderIcon = new Image();
         folderIcon.src = Folder;
-        projectElement.appendChild(folderIcon);
-        projectElement.appendChild(document.createTextNode(" " + projectTitle));
+        leftDiv.appendChild(folderIcon);
+
+        const nameDiv = document.createElement("div");
+        nameDiv.textContent = projectTitle;
+        leftDiv.appendChild(nameDiv);
+
+        const xDiv = document.createElement("div");
+        xDiv.classList.add("delete-project");
+        xDiv.classList.add("clickable");
+        xDiv.textContent = "✕";
+        projectElement.appendChild(xDiv);
+
         projects.appendChild(projectElement);
         return projectElement;
+    }
+
+    deleteProject(projectElement) {
+        projectElement.remove();
     }
 
     displayProjectTasks(newProject, projectElement, projectNodeList) {
@@ -33,6 +52,17 @@ class Display {
         // Change project title display
         const projectTitle = document.querySelector(".todo-container h1");
         projectTitle.textContent = newProject.title;
+    }
+
+    clearTasks() {
+        const taskTitle = document.querySelector(".todo-container h1");
+        taskTitle.textContent = "";
+
+        const todoListElement = document.querySelector(".todo-list");
+        while (todoListElement.children.length > 1) {
+            todoListElement.removeChild(todoListElement.firstChild);
+        }
+
     }
 
     createNewTask(newTask) {
@@ -78,7 +108,7 @@ class Display {
         deleteDiv.textContent = `Delete`;
         rightDiv.appendChild(deleteDiv);
 
-        const createTodoButton = document.querySelector(".final");
+        const createTodoButton = taskList.lastElementChild;
         taskList.insertBefore(taskElement, createTodoButton);
         return taskElement;
     }

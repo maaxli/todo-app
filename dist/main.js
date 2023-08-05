@@ -110,6 +110,7 @@ class App {
     // Helper method: Add event listeners to projects
     addProjectListeners(projectElement, newProject) {
         projectElement.addEventListener("click", () => {
+            console.log(`${newProject.title} displayed`);
             this.currProject = newProject;
             let projectList = document.querySelectorAll(".project-list li");
             this.display.displayProjectTasks(newProject, projectElement, projectList);
@@ -119,6 +120,22 @@ class App {
         });
         projectElement.addEventListener("mouseleave", () => {
             projectElement.classList.remove("project-mouseover");
+        });
+
+        const deleteButton = projectElement.lastElementChild;
+        deleteButton.addEventListener("click", (event) => {
+            const decision = prompt("Click \"OK\" to delete project: " + newProject.title + "\n(text input irrelevant)");
+            if (decision === null) return;
+            for (let i = 0; i < this.projects.length; i++) {
+                if (this.projects[i] === newProject) this.projects.splice(i, 1);
+            }
+            this.display.deleteProject(projectElement);
+            if (this.currProject === newProject) {
+                this.currProject = undefined;
+                this.display.clearTasks();
+            }
+            event.stopPropagation();
+            console.log("project deleted");
         });
     }
 }
@@ -144,13 +161,32 @@ class Display {
 
     createNewProject(projectTitle) {
         const projects = document.querySelector(".project-list");
-        let projectElement = document.createElement("li");
-        let folderIcon = new Image();
+        const projectElement = document.createElement("li");
+
+        const leftDiv = document.createElement("div");
+        leftDiv.classList.add("project-left");
+        projectElement.appendChild(leftDiv);
+
+        const folderIcon = new Image();
         folderIcon.src = _assets_folder_svg__WEBPACK_IMPORTED_MODULE_0__;
-        projectElement.appendChild(folderIcon);
-        projectElement.appendChild(document.createTextNode(" " + projectTitle));
+        leftDiv.appendChild(folderIcon);
+
+        const nameDiv = document.createElement("div");
+        nameDiv.textContent = projectTitle;
+        leftDiv.appendChild(nameDiv);
+
+        const xDiv = document.createElement("div");
+        xDiv.classList.add("delete-project");
+        xDiv.classList.add("clickable");
+        xDiv.textContent = "✕";
+        projectElement.appendChild(xDiv);
+
         projects.appendChild(projectElement);
         return projectElement;
+    }
+
+    deleteProject(projectElement) {
+        projectElement.remove();
     }
 
     displayProjectTasks(newProject, projectElement, projectNodeList) {
@@ -169,6 +205,17 @@ class Display {
         // Change project title display
         const projectTitle = document.querySelector(".todo-container h1");
         projectTitle.textContent = newProject.title;
+    }
+
+    clearTasks() {
+        const taskTitle = document.querySelector(".todo-container h1");
+        taskTitle.textContent = "";
+
+        const todoListElement = document.querySelector(".todo-list");
+        while (todoListElement.children.length > 1) {
+            todoListElement.removeChild(todoListElement.firstChild);
+        }
+
     }
 
     createNewTask(newTask) {
@@ -214,7 +261,7 @@ class Display {
         deleteDiv.textContent = `Delete`;
         rightDiv.appendChild(deleteDiv);
 
-        const createTodoButton = document.querySelector(".final");
+        const createTodoButton = taskList.lastElementChild;
         taskList.insertBefore(taskElement, createTodoButton);
         return taskElement;
     }

@@ -16,6 +16,7 @@
 
 body {
     margin: 0;
+    cursor: default;
 }
 
 .main {
@@ -39,6 +40,10 @@ ul {
     display: flex;
     padding: 0;
     margin: 0;
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 /* HEADER STYLES */
@@ -132,10 +137,16 @@ ul {
 
 .project-list li {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 4px;
     padding: 4px 8px;
     border-radius: 5px;
+}
+
+.project-left {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .project-mouseover {
