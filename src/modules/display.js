@@ -1,5 +1,6 @@
 import Folder from "../assets/folder.svg";
 import Trash from "../assets/trash.svg";
+import Pencil from "../assets/pencil.png";
 
 // Role: Interact with DOM, handle display
 
@@ -17,6 +18,7 @@ class Display {
 
         const folderIcon = new Image();
         folderIcon.src = Folder;
+        folderIcon.alt = "SVG folder";
         leftDiv.appendChild(folderIcon);
 
         const nameDiv = document.createElement("div");
@@ -101,14 +103,16 @@ class Display {
         rightDiv.classList.add("right-items");
         taskElement.appendChild(rightDiv);
 
-        const editDiv = document.createElement("div");
-        editDiv.textContent = `Edit`;
-        rightDiv.appendChild(editDiv);
-        
-
+        const pencilIcon = new Image();
+        pencilIcon.src = Pencil;
+        pencilIcon.classList.add("clickable");
+        pencilIcon.alt = "PNG pencil"
+        rightDiv.appendChild(pencilIcon);
 
         const trashIcon = new Image();
         trashIcon.src = Trash;
+        trashIcon.classList.add("clickable");
+        trashIcon.alt = "SVG trash";
         rightDiv.appendChild(trashIcon);
 
         const createTodoButton = taskList.lastElementChild;
