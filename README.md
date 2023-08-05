@@ -9,3 +9,7 @@ I will also be able to practice the following skills which I have recently learn
 - CSS
 - webpack
 - git branching
+
+Things that I've learned through this project:
+1. Planning out the project's file structure/OOP design is extremely helpful in the long run. In the future, I should also consider letting the `display` class handle even more (all?) of the event listeners.
+2. Be extra thoughtful when naming variables and constants, especially when objects/nodes can be very similar. Ie: task (object) vs task list (nodelist) vs the list that holds the tasks (`ul` element)
