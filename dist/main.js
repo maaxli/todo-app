@@ -173,6 +173,7 @@ class Display {
 
         const folderIcon = new Image();
         folderIcon.src = _assets_folder_svg__WEBPACK_IMPORTED_MODULE_0__;
+        folderIcon.alt = "SVG folder";
         leftDiv.appendChild(folderIcon);
 
         const nameDiv = document.createElement("div");
@@ -260,11 +261,13 @@ class Display {
         const pencilIcon = new Image();
         pencilIcon.src = _assets_pencil_png__WEBPACK_IMPORTED_MODULE_2__;
         pencilIcon.classList.add("clickable");
+        pencilIcon.alt = "PNG pencil"
         rightDiv.appendChild(pencilIcon);
 
         const trashIcon = new Image();
         trashIcon.src = _assets_trash_svg__WEBPACK_IMPORTED_MODULE_1__;
         trashIcon.classList.add("clickable");
+        trashIcon.alt = "SVG trash";
         rightDiv.appendChild(trashIcon);
 
         const createTodoButton = taskList.lastElementChild;
