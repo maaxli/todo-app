@@ -1,4 +1,5 @@
 import Folder from "../assets/folder.svg";
+import Trash from "../assets/trash.svg";
 
 // Role: Interact with DOM, handle display
 
@@ -103,10 +104,12 @@ class Display {
         const editDiv = document.createElement("div");
         editDiv.textContent = `Edit`;
         rightDiv.appendChild(editDiv);
+        
 
-        const deleteDiv = document.createElement("div");
-        deleteDiv.textContent = `Delete`;
-        rightDiv.appendChild(deleteDiv);
+
+        const trashIcon = new Image();
+        trashIcon.src = Trash;
+        rightDiv.appendChild(trashIcon);
 
         const createTodoButton = taskList.lastElementChild;
         taskList.insertBefore(taskElement, createTodoButton);

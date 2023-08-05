@@ -10,8 +10,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _display__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _todoItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _todoProject__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
+/* harmony import */ var _todoItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+/* harmony import */ var _todoProject__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
 
 
@@ -151,6 +151,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _assets_folder_svg__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+/* harmony import */ var _assets_trash_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+
 
 
 // Role: Interact with DOM, handle display
@@ -256,10 +258,12 @@ class Display {
         const editDiv = document.createElement("div");
         editDiv.textContent = `Edit`;
         rightDiv.appendChild(editDiv);
+        
 
-        const deleteDiv = document.createElement("div");
-        deleteDiv.textContent = `Delete`;
-        rightDiv.appendChild(deleteDiv);
+
+        const trashIcon = new Image();
+        trashIcon.src = _assets_trash_svg__WEBPACK_IMPORTED_MODULE_1__;
+        rightDiv.appendChild(trashIcon);
 
         const createTodoButton = taskList.lastElementChild;
         taskList.insertBefore(taskElement, createTodoButton);
@@ -277,6 +281,12 @@ module.exports = __webpack_require__.p + "cfba46690d019c379d15.svg";
 
 /***/ }),
 /* 4 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "76e37d09b6d655a6df74.svg";
+
+/***/ }),
+/* 5 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -323,7 +333,7 @@ class Todo {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Todo);
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
