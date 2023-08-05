@@ -10,6 +10,7 @@
     --color-one: rgb(66, 102, 133);
     --color-two: rgb(196, 192, 192);
     --color-three: rgb(221, 220, 220);
+    --project-alternative: rgb(168, 168, 168);
     font-family: 'Roboto';
 }
 
@@ -137,12 +138,16 @@ ul {
     border-radius: 5px;
 }
 
+.project-mouseover {
+    background-color: var(--project-alternative);
+}
+
 .project-list li:active {
-    background-color: rgb(168, 168, 168);
+    background-color: var(--project-alternative);
 }
 
 .selected {
-    background-color: rgb(168, 168, 168);
+    background-color: var(--project-alternative);
 }
 
 .project-list img {

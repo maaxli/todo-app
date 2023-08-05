@@ -28,15 +28,15 @@ class App {
         this.currProject = project1;
         project1.todos.push(new _todoItem__WEBPACK_IMPORTED_MODULE_1__["default"]("Thrive at Penn | Canvas", "", "8/18/2023", "Medium"));
         project1.todos.push(new _todoItem__WEBPACK_IMPORTED_MODULE_1__["default"]("Buy Dorm Items", "", "8/18/2023", "High"));
-        project1.todos.push(new _todoItem__WEBPACK_IMPORTED_MODULE_1__["default"]("Pack", "", "8/21/2023", "Low"));
+        project1.todos.push(new _todoItem__WEBPACK_IMPORTED_MODULE_1__["default"]("Pack Items", "", "8/21/2023", "Low"));
         const sampleElement1 = this.display.createNewProject(project1.title);
-        this.addProjectListener(sampleElement1, project1);
+        this.addProjectListeners(sampleElement1, project1);
         
         const project2 = new _todoProject__WEBPACK_IMPORTED_MODULE_2__["default"]("The Odin Project");
         project2.todos.push(new _todoItem__WEBPACK_IMPORTED_MODULE_1__["default"]("Finish Todo List Project", "", "N/A", "High"));
         project2.todos.push(new _todoItem__WEBPACK_IMPORTED_MODULE_1__["default"]("Finish JavaScript Course", "skim CS section", "N/A", "Medium"));
         const sampleElement2 = this.display.createNewProject(project2.title);
-        this.addProjectListener(sampleElement2, project2);
+        this.addProjectListeners(sampleElement2, project2);
 
         const projectList = document.querySelectorAll(".project-list li");
         this.display.displayProjectTasks(project1, sampleElement1, projectList);
@@ -61,7 +61,7 @@ class App {
 
                     // Display the project, AND return the new list item so we can add a listener
                     const projectElement = this.display.createNewProject(projectName);
-                    this.addProjectListener(projectElement, newProject);
+                    this.addProjectListeners(projectElement, newProject);
                     return;
                 }
                 alert("Error: Project name must be at least 2 characters long.");
@@ -108,11 +108,17 @@ class App {
     }
 
     // Helper method: Add event listeners to projects
-    addProjectListener(projectElement, newProject) {
+    addProjectListeners(projectElement, newProject) {
         projectElement.addEventListener("click", () => {
             this.currProject = newProject;
             let projectList = document.querySelectorAll(".project-list li");
             this.display.displayProjectTasks(newProject, projectElement, projectList);
+        });
+        projectElement.addEventListener("mouseenter", () => {
+            projectElement.classList.add("project-mouseover");
+        });
+        projectElement.addEventListener("mouseleave", () => {
+            projectElement.classList.remove("project-mouseover");
         });
     }
 }
@@ -138,13 +144,13 @@ class Display {
 
     createNewProject(projectTitle) {
         const projects = document.querySelector(".project-list");
-        let newProject = document.createElement("li");
+        let projectElement = document.createElement("li");
         let folderIcon = new Image();
         folderIcon.src = _assets_folder_svg__WEBPACK_IMPORTED_MODULE_0__;
-        newProject.appendChild(folderIcon);
-        newProject.appendChild(document.createTextNode(" " + projectTitle));
-        projects.appendChild(newProject);
-        return newProject;
+        projectElement.appendChild(folderIcon);
+        projectElement.appendChild(document.createTextNode(" " + projectTitle));
+        projects.appendChild(projectElement);
+        return projectElement;
     }
 
     displayProjectTasks(newProject, projectElement, projectNodeList) {
@@ -163,8 +169,6 @@ class Display {
         // Change project title display
         const projectTitle = document.querySelector(".todo-container h1");
         projectTitle.textContent = newProject.title;
-
-        console.log("done displaying tasks");
     }
 
     createNewTask(newTask) {

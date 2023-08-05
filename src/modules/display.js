@@ -8,13 +8,13 @@ class Display {
 
     createNewProject(projectTitle) {
         const projects = document.querySelector(".project-list");
-        let newProject = document.createElement("li");
+        let projectElement = document.createElement("li");
         let folderIcon = new Image();
         folderIcon.src = Folder;
-        newProject.appendChild(folderIcon);
-        newProject.appendChild(document.createTextNode(" " + projectTitle));
-        projects.appendChild(newProject);
-        return newProject;
+        projectElement.appendChild(folderIcon);
+        projectElement.appendChild(document.createTextNode(" " + projectTitle));
+        projects.appendChild(projectElement);
+        return projectElement;
     }
 
     displayProjectTasks(newProject, projectElement, projectNodeList) {
@@ -33,8 +33,6 @@ class Display {
         // Change project title display
         const projectTitle = document.querySelector(".todo-container h1");
         projectTitle.textContent = newProject.title;
-
-        console.log("done displaying tasks");
     }
 
     createNewTask(newTask) {
