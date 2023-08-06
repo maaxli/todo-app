@@ -1,5 +1,7 @@
 # todo-app
 
+https://maaxli.github.io/todo-app/
+
 This project is mainly for me to practice JavaScript, particularly with respect to:
 - Classes, modules, factory functions, etc.
 - OOP design principles, particularly Single Responsibility
