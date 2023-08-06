@@ -8,6 +8,8 @@ class Display {
     constructor() {
     }
 
+
+    /* PROJECT-RELATED FUNCTIONS */
     createNewProject(projectTitle) {
         const projects = document.querySelector(".project-list");
         const projectElement = document.createElement("li");
@@ -48,15 +50,20 @@ class Display {
         while (taskList.childElementCount > 1) {
             taskList.removeChild(taskList.firstChild);
         }
+
+        const taskElements = [];
         newProject.todos.forEach((task) => {
-            this.displayTask(task, taskList);
+            taskElements.push(this.displayTask(task, taskList));
         });
 
         // Change project title display
         const projectTitle = document.querySelector(".todo-container h1");
         projectTitle.textContent = newProject.title;
+        return taskElements;
     }
 
+
+    /* TASK RELATED FUNCTIONS */
     clearTasks() {
         const taskTitle = document.querySelector(".todo-container h1");
         taskTitle.textContent = "";
@@ -70,7 +77,7 @@ class Display {
 
     createNewTask(newTask) {
         const taskList = document.querySelector(".todo-list");
-        this.displayTask(newTask, taskList);
+        return this.displayTask(newTask, taskList);
     }
 
     // Helper function, returns the task's element that was created
@@ -118,6 +125,10 @@ class Display {
         const createTodoButton = taskList.lastElementChild;
         taskList.insertBefore(taskElement, createTodoButton);
         return taskElement;
+    }
+
+    deleteTask(taskElement) {
+        taskElement.remove();
     }
 }
 
