@@ -25,10 +25,13 @@ class App {
         this.addProjectListeners(sampleElement2, project2);
 
         const projectList = document.querySelectorAll(".project-list li");
-        this.display.displayProjectTasks(project1, sampleElement1, projectList);
+        const taskElements = this.display.displayProjectTasks(project1, sampleElement1, projectList); // return array of task elements
+        taskElements.forEach((task) => {
+            this.addTaskListeners(task);
+        });
     }
 
-    // Adding event listeners to all buttons
+    // Adding event listeners to all buttons, add listeners to sample tasks
     initialize() {
 
         // Listening to the `+ New Project` button
@@ -63,7 +66,7 @@ class App {
                 return;
             }
             let taskTitle = "";
-            while (taskTitle.length < 2) {
+            while (taskTitle.length < 2) { // also, cant be a repeated task title TODO
                 taskTitle = prompt("Enter task name");
                 if (taskTitle === null) {
                     return;
@@ -85,7 +88,8 @@ class App {
                     // All fields are valid, so create a new task and add it to the current project
                     const newTask = new Todo(taskTitle, taskDescription, taskDueDate, taskPriority);
                     this.currProject.todos.push(newTask);
-                    this.display.createNewTask(newTask);
+                    const taskElement = this.display.createNewTask(newTask);
+                    this.addTaskListeners(taskElement);
                     return;
                 }
                 alert("Error: Enter valid task priority.");
@@ -96,10 +100,12 @@ class App {
     // Helper method: Add event listeners to projects
     addProjectListeners(projectElement, newProject) {
         projectElement.addEventListener("click", () => {
-            console.log(`${newProject.title} displayed`);
             this.currProject = newProject;
             let projectList = document.querySelectorAll(".project-list li");
-            this.display.displayProjectTasks(newProject, projectElement, projectList);
+            const taskElements = this.display.displayProjectTasks(newProject, projectElement, projectList);
+            taskElements.forEach((task) => {
+                this.addTaskListeners(task);
+            });
         });
         projectElement.addEventListener("mouseenter", () => {
             projectElement.classList.add("project-mouseover");
@@ -121,8 +127,21 @@ class App {
                 this.display.clearTasks();
             }
             event.stopPropagation();
-            console.log("project deleted");
         });
+    }
+
+    addTaskListeners(taskElement) { // taskElement is an <li> element
+        const deleteButton = taskElement.querySelector('[alt="SVG trash"]');
+        deleteButton.addEventListener("click", () => {
+            for (let i = 0; i < this.currProject.todos.length; i++) {
+                if (this.currProject.todos[i].title == taskElement.querySelector(".top").textContent) {
+                    this.currProject.todos.splice(i, 1);
+                    break;
+                }
+            }
+            this.display.deleteTask(taskElement);
+        });
+
     }
 }
 
